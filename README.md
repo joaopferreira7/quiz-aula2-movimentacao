@@ -1,27 +1,34 @@
 # Quiz – Aula 2: Movimentação básica com pulo (2D)
 
-Unity **6000.4.1f1** · Input Manager (antigo) · física 2D (Rigidbody2D)
+Unity **6000.4.1f1** · Input System · física 2D (Rigidbody2D) · assets **Kenney Pixel Platformer** (CC0)
+
+![Preview do pack](Assets/Kenney%20Pixel%20Platformer/Preview.png)
 
 ## Como abrir
 1. Unity Hub → **Add project from disk** → selecione esta pasta.
 2. Abra a cena `Assets/Scenes/Main.unity` e aperte **Play**.
 
 ## Controles
-| Ação | Tecla |
-|---|---|
-| Andar | A / D ou ← / → |
-| Pular | Espaço, W ou ↑ |
+| Ação | Teclado | Controle |
+|---|---|---|
+| Andar | A / D ou ← / → | Analógico esquerdo |
+| Pular | Espaço, W ou ↑ | Botão A |
 
 ## O que foi feito
 - `Assets/Scripts/PlayerController2D.cs`
-  - Lê o input no `Update` e aplica a velocidade no `FixedUpdate` (passo da física).
-  - Movimento horizontal pela `linearVelocity` do `Rigidbody2D`; o pulo define a velocidade vertical.
+  - Inputs criados por código com o **Input System** (`InputAction`), lidos no `Update`.
+  - A física é aplicada no `FixedUpdate`: velocidade horizontal pela `linearVelocity` do `Rigidbody2D`; o pulo define a velocidade vertical.
   - Só pula se estiver no chão: `Rigidbody2D.IsTouching` com um `ContactFilter2D` que aceita apenas contatos cuja normal aponta para cima (não precisa de layers).
-  - Rotação travada e respawn se cair do mapa.
-- `Assets/Scripts/CameraFollow2D.cs` – câmera que segue o jogador.
+  - Vira o sprite (`flipX`) para o lado em que anda, trava a rotação e volta ao início se cair do mapa.
+- `Assets/Scripts/CameraFollow2D.cs` – câmera que segue o jogador (com o fundo do pack preso a ela).
+- `Assets/Fisica/JogadorSemAtrito` – material sem atrito para o jogador não grudar nas paredes.
 - `Assets/Editor/SceneBuilder.cs` – menu **Quiz → Recriar cena** monta a cena do zero.
+- `Assets/Editor/KenneySpriteImporter.cs` – configura os PNGs do pack como pixel art (Point, sem compressão, 1 tile = 1 unidade).
 
 ## Assets
-O cenário usa um sprite quadrado simples (`Assets/Sprites/Quadrado.png`). Para usar um pack de assets
-(ex.: *Kenney Pixel Platformer*, gratuito), importe o pack e arraste o sprite desejado no campo
-**Sprite** do `SpriteRenderer` do Player e das plataformas – o código não muda.
+[Kenney Pixel Platformer](https://kenney.nl/assets/pixel-platformer) (licença CC0, ver `Assets/Kenney Pixel Platformer/License.txt`):
+personagem, chão de grama/terra, plataformas de madeira, decoração e fundo.
+
+## Teste automático
+`Assets/Tests/CenaTests.cs` (Window → General → Test Runner → PlayMode → Run All) carrega a cena e verifica que o
+jogador pousa no chão e fica parado sobre ele.
